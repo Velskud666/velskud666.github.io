@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIR4 Stat Calculator and Crafting Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 5px;
+        }
+
+        .tab.active {
+            background-color: #1abc9c;
+        }
+
+        .calculator, .crafting {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .material {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #2980b9;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .material.selected {
+            background-color: #1abc9c;
+            color: white;
+            border-color: #1abc9c;
+        }
+
+        #results, #craftingResults {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #2980b9;
+            border-radius: 5px;
+        }
+
+        .category {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>MIR4 Stat Calculator and Crafting Simulator</h1>
+
+<div class="tabs">
+    <div class="tab active" onclick="showTab('calculator')">Stat Calculator</div>
+    <div class="tab" onclick="showTab('crafting')">Crafting Simulator</div>
+</div>
+
+<!-- Stat Calculator -->
+<div class="calculator" id="calculator" style="display: block;">
+    <h2>Stat Calculator</h2>
+    <!-- Stat input fields -->
+    <div>
+        <label>Accuracy:</label>
+        <input type="number" id="accuracy" value="0">
+    </div>
+    <div>
+        <label>Evasion:</label>
+        <input type="number" id="evasion" value="0">
+    </div>
+    <div>
+        <label>Stun Success:</label>
+        <input type="number" id="stunSuccess" value="0">
+    </div>
+    <div>
+        <label>Stun Resist:</label>
+        <input type="number" id="stunRes" value="0">
+    </div>
+    <div>
+        <label>Debilitation Success:</label>
+        <input type="number" id="debilitationSuccess" value="0">
+    </div>
+    <div>
+        <label>Debilitation Resist:</label>
+        <input type="number" id="debilitationRes" value="0">
+    </div>
+    <div>
+        <label>Silence Success:</label>
+        <input type="number" id="silenceSuccess" value="0">
+    </div>
+    <div>
+        <label>Silence Resist:</label>
+        <input type="number" id="silenceRes" value="0">
+    </div>
+    <div>
+        <label>Knockdown Success:</label>
+        <input type="number" id="knockdownSuccess" value="0">
+    </div>
+    <div>
+        <label>Knockdown Resist:</label>
+        <input type="number" id="knockdownRes" value="0">
+    </div>
+    <button onclick="calculateStats()">Calculate</button>
+
+    <div id="results"></div>
+</div>
+
+<!-- Crafting Simulator -->
+<div class="crafting" id="crafting">
+    <h2>Crafting Simulator</h2>
+    
+    <div class="category">
+        <h3>RARE</h3>
+        <div>
+            <div class="material" onclick="selectMaterial('Steel', 'RARE')">Steel</div>
+            <div class="material" onclick="selectMaterial('Platinum', 'RARE')">Platinum</div>
+            <div class="material" onclick="selectMaterial('Evil Minded Orb', 'RARE')">Evil Minded Orb</div>
+            <div class="material" onclick="selectMaterial('Moon Shadow Stone', 'RARE')">Moon Shadow Stone</div>
+            <div class="material" onclick="selectMaterial('Quintessence', 'RARE')">Quintessence</div>
+            <div class="material" onclick="selectMaterial('Exorcism Bauble', 'RARE')">Exorcism Bauble</div>
+            <div class="material" onclick="selectMaterial('Illuminating Fragment', 'RARE')">Illuminating Fragment</div>
+            <div class="material" onclick="selectMaterial('Anima Stone', 'RARE')">Anima Stone</div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h3>EPIC</h3>
+        <div>
+            <div class="material" onclick="selectMaterial('Steel', 'EPIC')">Steel</div>
+            <div class="material" onclick="selectMaterial('Platinum', 'EPIC')">Platinum</div>
+            <div class="material" onclick="selectMaterial('Evil Minded Orb', 'EPIC')">Evil Minded Orb</div>
+            <div class="material" onclick="selectMaterial('Moon Shadow Stone', 'EPIC')">Moon Shadow Stone</div>
+            <div class="material" onclick="selectMaterial('Quintessence', 'EPIC')">Quintessence</div>
+            <div class="material" onclick="selectMaterial('Exorcism Bauble', 'EPIC')">Exorcism Bauble</div>
+            <div class="material" onclick="selectMaterial('Illuminating Fragment', 'EPIC')">Illuminating Fragment</div>
+            <div class="material" onclick="selectMaterial('Anima Stone', 'EPIC')">Anima Stone</div>
+        </div>
+    </div>
+
+    <div class="category">
+        <h3>LEGENDARY</h3>
+        <div>
+            <div class="material" onclick="selectMaterial('Steel', 'LEGENDARY')">Steel</div>
+            <div class="material" onclick="selectMaterial('Platinum', 'LEGENDARY')">Platinum</div>
+            <div class="material" onclick="selectMaterial('Evil Minded Orb', 'LEGENDARY')">Evil Minded Orb</div>
+            <div class="material" onclick="selectMaterial('Moon Shadow Stone', 'LEGENDARY')">Moon Shadow Stone</div>
+            <div class="material" onclick="selectMaterial('Quintessence', 'LEGENDARY')">Quintessence</div>
+            <div class="material" onclick="selectMaterial('Exorcism Bauble', 'LEGENDARY')">Exorcism Bauble</div>
+            <div class="material" onclick="selectMaterial('Illuminating Fragment', 'LEGENDARY')">Illuminating Fragment</div>
+            <div class="material" onclick="selectMaterial('Anima Stone', 'LEGENDARY')">Anima Stone</div>
+        </div>
+    </div>
+
+    <div>
+        <label for="craftAmount">Amount to Craft:</label>
+        <input type="number" id="craftAmount" value="1">
+    </div>
+    <button onclick="calculateCraftingCosts()">Calculate Costs</button>
+
+    <div id="craftingResults"></div>
+</div>
+
+<script>
+    function showTab(tab) {
+        // Hide all sections
+        document.getElementById('calculator').style.display = 'none';
+        document.getElementById('crafting').style.display = 'none';
+
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab').forEach(t => {
+            t.classList.remove('active');
+        });
+
+        // Show the selected tab
+        document.getElementById(tab).style.display = 'block';
+        document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
+    }
+
+    let selectedMaterial = '';
+    let selectedRarity = '';
+
+    function selectMaterial(material, rarity) {
+        // Deselect previous material
+        if (selectedMaterial) {
+            document.querySelector('.material.selected').classList.remove('selected');
+        }
+        // Select new material
+        selectedMaterial = material;
+        selectedRarity = rarity;
+        document.querySelector(`.material[onclick="selectMaterial('${material}', '${rarity}')"]`).classList.add('selected');
+    }
+
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function calculateCraftingCosts() {
+        if (!selectedMaterial) {
+            alert("Please select a material.");
+            return;
+        }
+        const amount = parseInt(document.getElementById("craftAmount").value) || 1;
+
+        let copperCost, darksteelCost, glitteringPowderCost;
+        
+        switch (selectedRarity) {
+            case 'RARE':
+                copperCost = 2000 * amount;
+                darksteelCost = 1000 * amount;
+                glitteringPowderCost = 2 * amount;
+                break;
+            case 'EPIC':
+                copperCost = 20000 * amount;
+                darksteelCost = 5000 * amount;
+                glitteringPowderCost = 25 * amount;
+                break;
+            case 'LEGENDARY':
+                copperCost = 100000 * amount;
+                darksteelCost = 25000 * amount;
+                glitteringPowderCost = 125 * amount;
+                break;
+            default:
+                alert("Invalid rarity selected.");
+                return;
+        }
+
+        document.getElementById("craftingResults").innerHTML = `
+            <h3>Crafting Costs for ${selectedMaterial} (${selectedRarity}):</h3>
+            <p>Total Copper: ${formatNumber(copperCost)}</p>
+            <p>Total Darksteel: ${formatNumber(darksteelCost)}</p>
+            <p>Total Glittering Powder: ${formatNumber(glitteringPowderCost)}</p>
+        `;
+    }
+
+    function calculateStats() {
+        const accuracy = parseInt(document.getElementById("accuracy").value) || 0;
+        const evasion = parseInt(document.getElementById("evasion").value) || 0;
+        const stunSuccess = parseInt(document.getElementById("stunSuccess").value) || 0;
+        const stunRes = parseInt(document.getElementById("stunRes").value) || 0;
+        const debilitationSuccess = parseInt(document.getElementById("debilitationSuccess").value) || 0;
+        const debilitationRes = parseInt(document.getElementById("debilitationRes").value) || 0;
+        const silenceSuccess = parseInt(document.getElementById("silenceSuccess").value) || 0;
+        const silenceRes = parseInt(document.getElementById("silenceRes").value) || 0;
+        const knockdownSuccess = parseInt(document.getElementById("knockdownSuccess").value) || 0;
+        const knockdownRes = parseInt(document.getElementById("knockdownRes").value) || 0;
+
+        const accuracyToHit = (accuracy / (accuracy + evasion)) * 100;
+        const stunChance = (stunSuccess / (stunSuccess + stunRes)) * 100;
+        const debilitationChance = (debilitationSuccess / (debilitationSuccess + debilitationRes)) * 100;
+        const silenceChance = (silenceSuccess / (silenceSuccess + silenceRes)) * 100;
+        const knockdownChance = (knockdownSuccess / (knockdownSuccess + knockdownRes)) * 100;
+
+        document.getElementById("results").innerHTML = `
+            <h3>Calculation Results:</h3>
+            <p>Chance to Hit: ${accuracyToHit.toFixed(2)}%</p>
+            <p>Stun Chance: ${stunChance.toFixed(2)}%</p>
+            <p>Debilitation Chance: ${debilitationChance.toFixed(2)}%</p>
+            <p>Silence Chance: ${silenceChance.toFixed(2)}%</p>
+            <p>Knockdown Chance: ${knockdownChance.toFixed(2)}%</p>
+        `;
+    }
+</script>
+
+</body>
+</html>
